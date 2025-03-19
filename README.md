@@ -1,6 +1,7 @@
-# YouTube Watch Later to Excel (Device Authentication Version)
+# YouTube Playlist to Excel
 
-This Python script extracts videos from your YouTube Watch Later playlist and creates an Excel file with the following columns:
+This Python script extracts videos from any YouTube playlist by ID and creates an Excel file with the following columns:
+
 - Channel
 - Video Title
 - Video Description
@@ -17,8 +18,10 @@ This Python script extracts videos from your YouTube Watch Later playlist and cr
 
 ### 1. Install Required Python Packages
 
+You can install all required packages using the included requirements.txt file:
+
 ```bash
-pip install google-api-python-client google-auth-oauthlib google-auth-httplib2 pandas openpyxl
+pip install -r requirements.txt
 ```
 
 ### 2. Set Up Google Cloud Project and Enable YouTube Data API
@@ -33,30 +36,56 @@ pip install google-api-python-client google-auth-oauthlib google-auth-httplib2 p
 1. In the Google Cloud Console, navigate to "APIs & Services" > "Credentials"
 2. Click "Create Credentials" and select "OAuth client ID"
 3. Select "Desktop app" as the application type
-4. Enter a name for your OAuth client (e.g., "YouTube Watch Later Extractor")
+4. Enter a name for your OAuth client (e.g., "YouTube Playlist Extractor")
 5. Click "Create"
 6. Download the JSON file by clicking the download button
 7. Rename the downloaded file to `client_secret.json` and place it in the same directory as the script
 
 ## Usage
 
+The script supports the following command-line options:
+
+```bash
+python youtube_watch_later.py [playlist_id] [-o OUTPUT_FILE]
+```
+
+Where:
+- `playlist_id`: Optional YouTube playlist ID (if not provided, you will be prompted)
+- `-o OUTPUT_FILE` or `--output OUTPUT_FILE`: Optional custom output filename
+
+### Examples
+
+#### Basic Usage (Will Prompt for Playlist ID)
+```bash
+python youtube_watch_later.py
+```
+
+#### Provide Playlist ID Directly
+```bash
+python youtube_watch_later.py PLv5D27PeF1QwexfA46_kHG385hHdtjLyM
+```
+
+#### Specify Custom Output Filename
+```bash
+python youtube_watch_later.py PLv5D27PeF1QwexfA46_kHG385hHdtjLyM -o my_videos.xlsx
+```
+
+### Authentication Process
+
 1. Place the `youtube_watch_later.py` script and your `client_secret.json` file in the same directory
-2. Run the script:
-   ```bash
-   python youtube_watch_later.py
-   ```
+2. Run the script with your desired options
 3. The script will display an authorization URL
 4. Open the URL in your browser, log in to your Google account, and grant permission to access your YouTube data
 5. You will receive an authorization code - copy this code
 6. Paste the authorization code into the script prompt
-7. The script will extract your Watch Later playlist and create an Excel file named `youtube_watch_later.xlsx` in the same directory
+7. The script will extract the playlist videos and create an Excel file (named based on the playlist name or using your custom filename)
 
 ## Notes
 
-- This version uses device authentication flow, which allows you to authenticate on a different device than the one running the script
+- This script uses device authentication flow, which allows you to authenticate on a different device than the one running the script
 - The authentication token is stored in a file named `token.pickle` for future use
 - If you want to use a different Google account, delete the `token.pickle` file and run the script again
-- The Watch Later playlist is a special playlist in YouTube that requires specific handling
+- To get a playlist ID, open the playlist in YouTube and look at the URL. The ID is the value after `list=` (e.g., `PLv5D27PeF1QwexfA46_kHG385hHdtjLyM`)
 
 ## Troubleshooting
 
